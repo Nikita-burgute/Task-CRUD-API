@@ -119,9 +119,7 @@ You can use Swagger UI to:
 
 ### Swagger Screenshot
 
-> Add your Swagger UI screenshot below.
-
-![Swagger UI](images/swagger.png)
+![Swagger UI](images/swagger.jpeg)
 
 ---
 
