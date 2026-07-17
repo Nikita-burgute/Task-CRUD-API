@@ -2,13 +2,11 @@ const express = require("express");
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 
-// In-memory task list
 let tasks = [];
 
-// Root endpoint
+// Root
 app.get("/", (req, res) => {
     res.json({
         name: "Task API",
@@ -17,7 +15,7 @@ app.get("/", (req, res) => {
     });
 });
 
-// Health endpoint
+// Health
 app.get("/health", (req, res) => {
     res.json({
         status: "ok"
@@ -29,7 +27,7 @@ app.get("/tasks", (req, res) => {
     res.json(tasks);
 });
 
-// Create a new task
+// Create task
 app.post("/tasks", (req, res) => {
 
     const { title } = req.body;
@@ -49,6 +47,61 @@ app.post("/tasks", (req, res) => {
     tasks.push(task);
 
     res.status(201).json(task);
+});
+
+// Update task
+app.put("/tasks/:id", (req, res) => {
+
+    const id = parseInt(req.params.id);
+
+    const task = tasks.find(task => task.id === id);
+
+    if (!task) {
+        return res.status(404).json({
+            error: "Task not found"
+        });
+    }
+
+    const { title, done } = req.body;
+
+    if (title === undefined && done === undefined) {
+        return res.status(400).json({
+            error: "Nothing to update"
+        });
+    }
+
+    if (title !== undefined) {
+        if (title.trim() === "") {
+            return res.status(400).json({
+                error: "Title cannot be empty"
+            });
+        }
+        task.title = title;
+    }
+
+    if (done !== undefined) {
+        task.done = done;
+    }
+
+    res.json(task);
+});
+
+// Delete task
+app.delete("/tasks/:id", (req, res) => {
+
+    const id = parseInt(req.params.id);
+
+    const index = tasks.findIndex(task => task.id === id);
+
+    if (index === -1) {
+        return res.status(404).json({
+            error: "Task not found"
+        });
+    }
+
+    tasks.splice(index, 1);
+
+    res.sendStatus(204);
 
 });
 
