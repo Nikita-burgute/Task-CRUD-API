@@ -10,8 +10,6 @@ app.use(express.json());
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-let tasks = [];
-
 // Root
 app.get("/", (req, res) => {
     res.json({
@@ -28,10 +26,71 @@ app.get("/health", (req, res) => {
     });
 });
 
-// Get all tasks
+// ===============================
+// GET ALL TASKS (Database)
+// ===============================
 app.get("/tasks", (req, res) => {
-    res.json(tasks);
+
+    db.all("SELECT * FROM tasks", [], (err, rows) => {
+
+        if (err) {
+            return res.status(500).json({
+                error: err.message
+            });
+        }
+
+        const tasks = rows.map(task => ({
+            id: task.id,
+            title: task.title,
+            done: Boolean(task.done)
+        }));
+
+        res.json(tasks);
+    });
+
 });
+
+// ===============================
+// GET TASK BY ID (Database)
+// ===============================
+app.get("/tasks/:id", (req, res) => {
+
+    const id = req.params.id;
+
+    db.get(
+        "SELECT * FROM tasks WHERE id = ?",
+        [id],
+        (err, row) => {
+
+            if (err) {
+                return res.status(500).json({
+                    error: err.message
+                });
+            }
+
+            if (!row) {
+                return res.status(404).json({
+                    error: "Task not found"
+                });
+            }
+
+            res.json({
+                id: row.id,
+                title: row.title,
+                done: Boolean(row.done)
+            });
+
+        }
+    );
+
+});
+
+// ===================================================
+// KEEP THESE ROUTES UNCHANGED UNTIL STAGE 2 & STAGE 3
+// ===================================================
+
+// Temporary in-memory array
+let tasks = [];
 
 // Create task
 app.post("/tasks", (req, res) => {
