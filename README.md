@@ -129,19 +129,9 @@ Swagger allows you to:
 
 ### Swagger Screenshot
 
-```text
-images/swagger.png
-```
 
-or
-
-```markdown
 ![Swagger UI](images/swagger.jpeg)
-```
 
-*(Use whichever filename matches your repository. If your image is actually named `swagger.jpeg`, keep that filename instead.)*
-
----
 
 # 📂 Project Structure
 
