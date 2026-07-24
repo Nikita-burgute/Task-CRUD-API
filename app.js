@@ -103,15 +103,26 @@ app.post("/tasks", (req, res) => {
         });
     }
 
-    const task = {
-        id: tasks.length + 1,
-        title,
-        done: false
-    };
+    db.run(
+        "INSERT INTO tasks (title, done) VALUES (?, ?)",
+        [title.trim(), 0],
+        function (err) {
 
-    tasks.push(task);
+            if (err) {
+                return res.status(500).json({
+                    error: err.message
+                });
+            }
 
-    res.status(201).json(task);
+            res.status(201).json({
+                id: this.lastID,
+                title: title.trim(),
+                done: false
+            });
+
+        }
+    );
+
 });
 
 // Update task
