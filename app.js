@@ -162,25 +162,34 @@ app.put("/tasks/:id", (req, res) => {
     res.json(task);
 });
 
-// Delete task
+/// Delete task
 app.delete("/tasks/:id", (req, res) => {
 
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
 
-    const index = tasks.findIndex(task => task.id === id);
+    db.run(
+        "DELETE FROM tasks WHERE id = ?",
+        [id],
+        function (err) {
 
-    if (index === -1) {
-        return res.status(404).json({
-            error: "Task not found"
-        });
-    }
+            if (err) {
+                return res.status(500).json({
+                    error: err.message
+                });
+            }
 
-    tasks.splice(index, 1);
+            if (this.changes === 0) {
+                return res.status(404).json({
+                    error: "Task not found"
+                });
+            }
 
-    res.sendStatus(204);
+            res.sendStatus(204);
+
+        }
+    );
 
 });
-
 // Start server
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
