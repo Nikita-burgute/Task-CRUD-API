@@ -27,66 +27,62 @@ app.get("/health", (req, res) => {
 });
 
 // ===============================
-// GET ALL TASKS (Database)
+// GET ALL TASKS (PostgreSQL)
 // ===============================
-app.get("/tasks", (req, res) => {
+app.get("/tasks", async (req, res) => {
 
-    db.all("SELECT * FROM tasks", [], (err, rows) => {
+    try {
 
-        if (err) {
-            return res.status(500).json({
-                error: err.message
-            });
-        }
+        const result = await db.query(
+            "SELECT * FROM tasks ORDER BY id"
+        );
 
-        const tasks = rows.map(task => ({
-            id: task.id,
-            title: task.title,
-            done: Boolean(task.done)
-        }));
+        res.json(result.rows);
 
-        res.json(tasks);
-    });
+    } catch (err) {
+
+        res.status(500).json({
+            error: err.message
+        });
+
+    }
 
 });
 
 // ===============================
-// GET TASK BY ID (Database)
+// GET TASK BY ID (PostgreSQL)
 // ===============================
-app.get("/tasks/:id", (req, res) => {
+app.get("/tasks/:id", async (req, res) => {
 
     const id = req.params.id;
 
-    db.get(
-        "SELECT * FROM tasks WHERE id = ?",
-        [id],
-        (err, row) => {
+    try {
 
-            if (err) {
-                return res.status(500).json({
-                    error: err.message
-                });
-            }
+        const result = await db.query(
+            "SELECT * FROM tasks WHERE id = $1",
+            [id]
+        );
 
-            if (!row) {
-                return res.status(404).json({
-                    error: "Task not found"
-                });
-            }
-
-            res.json({
-                id: row.id,
-                title: row.title,
-                done: Boolean(row.done)
+        if (result.rows.length === 0) {
+            return res.status(404).json({
+                error: "Task not found"
             });
-
         }
-    );
+
+        res.json(result.rows[0]);
+
+    } catch (err) {
+
+        res.status(500).json({
+            error: err.message
+        });
+
+    }
 
 });
 
 // ===================================================
-// KEEP THESE ROUTES UNCHANGED UNTIL STAGE 2 & STAGE 3
+// KEEP THESE ROUTES UNCHANGED UNTIL STAGE 3
 // ===================================================
 
 // Temporary in-memory array
@@ -162,7 +158,7 @@ app.put("/tasks/:id", (req, res) => {
     res.json(task);
 });
 
-/// Delete task
+// Delete task
 app.delete("/tasks/:id", (req, res) => {
 
     const id = req.params.id;
@@ -190,6 +186,7 @@ app.delete("/tasks/:id", (req, res) => {
     );
 
 });
+
 // Start server
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
