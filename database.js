@@ -1,50 +1,59 @@
-const sqlite3 = require("sqlite3").verbose();
+require("dotenv").config();
 
-// Create or open the database
-const db = new sqlite3.Database("./tasks.db", (err) => {
-    if (err) {
-        console.error("Error connecting to database:", err.message);
-    } else {
-        console.log("Connected to SQLite database.");
-    }
+const { Pool } = require("pg");
+
+// Create PostgreSQL connection pool
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
 });
 
-// Create table and seed sample data
-db.serialize(() => {
+// Initialize database
+async function initializeDatabase() {
 
-    // Create tasks table
-    db.run(`
-        CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            done INTEGER NOT NULL DEFAULT 0
-        )
-    `);
+    try {
 
-    // Check if table is empty
-    db.get("SELECT COUNT(*) AS count FROM tasks", (err, row) => {
-        if (err) {
-            console.error("Error checking tasks table:", err.message);
-            return;
-        }
+        // Test connection
+        await pool.query("SELECT NOW()");
+        console.log("Connected to PostgreSQL.");
 
-        // Seed only if table is empty
-        if (row.count === 0) {
+        // Create table
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS tasks (
+                id SERIAL PRIMARY KEY,
+                title TEXT NOT NULL,
+                done BOOLEAN NOT NULL DEFAULT FALSE
+            )
+        `);
 
-            const stmt = db.prepare(
-                "INSERT INTO tasks (title, done) VALUES (?, ?)"
-            );
+        // Check if table is empty
+        const result = await pool.query(
+            "SELECT COUNT(*) FROM tasks"
+        );
 
-            stmt.run("Learn Express", 0);
-            stmt.run("Connect SQLite", 0);
-            stmt.run("Build CRUD API", 1);
+        const count = parseInt(result.rows[0].count);
 
-            stmt.finalize();
+        // Seed only if empty
+        if (count === 0) {
+
+            await pool.query(`
+                INSERT INTO tasks (title, done)
+                VALUES
+                ('Learn Express', false),
+                ('Connect PostgreSQL', false),
+                ('Build CRUD API', true)
+            `);
 
             console.log("Sample tasks inserted.");
         }
-    });
 
-});
+    }
+    catch (err) {
+        console.error("Database Error:", err.message);
+    }
 
-module.exports = db;
+}
+
+// Run initialization
+initializeDatabase();
+
+module.exports = pool;
