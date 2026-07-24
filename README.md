@@ -1,71 +1,176 @@
-# Task CRUD API
+# 🚀 Task CRUD API
 
-A RESTful Task Management API built using **Node.js**, **Express.js**, **SQLite3**, and **Swagger UI** as part of the **FlyRank Backend AI Engineering Internship**.
+A RESTful Task Management API built using **Node.js**, **Express.js**, **PostgreSQL**, **Docker**, and **Swagger UI** as part of the **FlyRank Backend AI Engineering Internship**.
 
-This repository contains the work completed during:
-
-- ✅ **Week 2:** CRUD API using in-memory storage
-- ✅ **Week 3:** SQLite database integration with persistent storage
+This project demonstrates building a complete CRUD API, integrating it with a PostgreSQL database, and containerizing the entire application using Docker Compose.
 
 ---
 
-# 📌 Features
+## 📌 Internship Progress
 
-- Create a new task
-- Get all tasks
-- Get task by ID
-- Update an existing task
-- Delete a task
-- Input validation
-- SQLite database integration
-- Persistent data storage
-- Interactive API documentation using Swagger UI
+| Week | Task | Status |
+|------|------|--------|
+| Week 2 | Build CRUD REST API | ✅ Completed |
+| Week 3 | Connect API to PostgreSQL | ✅ Completed |
+| Week 4 | Dockerize the application | ✅ Completed |
 
 ---
 
-# 🛠️ Technologies Used
+# ✨ Features
 
+- ✅ Create a new task
+- ✅ Retrieve all tasks
+- ✅ Retrieve a task by ID
+- ✅ Update an existing task
+- ✅ Delete a task
+- ✅ Input validation
+- ✅ PostgreSQL database integration
+- ✅ Automatic database initialization
+- ✅ Sample data seeding
+- ✅ Dockerized application
+- ✅ Docker Compose support
+- ✅ Swagger API Documentation
+
+---
+
+# 🛠️ Tech Stack
+
+### Backend
 - Node.js
 - Express.js
-- SQLite3
-- Swagger UI Express
+
+### Database
+- PostgreSQL 16
+
+### API Documentation
+- Swagger UI
 - OpenAPI 3.0
+
+### DevOps
+- Docker
+- Docker Compose
+
+### Packages
+- pg
+- dotenv
+- swagger-ui-express
 
 ---
 
-# 🚀 Installation & Setup
+# 🏗️ Project Architecture
 
-## 1. Clone the repository
+```text
+                    ┌───────────────────────┐
+                    │       Client          │
+                    │ Browser / Postman     │
+                    └──────────┬────────────┘
+                               │
+                         HTTP Requests
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │  Express REST API     │
+                    │      (Node.js)        │
+                    └──────────┬────────────┘
+                               │
+                     PostgreSQL Queries
+                               │
+                               ▼
+                    ┌───────────────────────┐
+                    │    PostgreSQL 16      │
+                    │     Database          │
+                    └───────────────────────┘
+
+          Docker Compose manages both containers
+```
+
+---
+
+# 📂 Project Structure
+
+```
+Task-CRUD-API
+│
+├── app.js
+├── database.js
+├── Dockerfile
+├── compose.yaml
+├── openapi.json
+├── package.json
+├── package-lock.json
+├── .env.example
+├── README.md
+├── .gitignore
+│
+└── images
+      └── swagger.jpeg
+```
+
+---
+
+# 🚀 Getting Started
+
+## 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/Nikita-burgute/Task-CRUD-API.git
 ```
 
-## 2. Navigate to the project folder
-
 ```bash
 cd Task-CRUD-API
 ```
 
-## 3. Install dependencies
+---
+
+# 🐳 Run Using Docker (Recommended)
+
+Build and start the API and PostgreSQL database together.
+
+```bash
+docker compose up --build
+```
+
+To stop the application:
+
+```bash
+docker compose down
+```
+
+---
+
+# ▶️ Run Without Docker
+
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-## 4. Run the application
+Create a `.env` file:
+
+```env
+DATABASE_URL=postgres://postgres:dev@localhost:5432/tasks
+```
+
+Start PostgreSQL.
+
+Run the application:
 
 ```bash
 node app.js
 ```
 
-Server starts at:
+---
+
+# 🌐 Application URLs
+
+### API
 
 ```
 http://localhost:3000
 ```
 
-Swagger Documentation:
+### Swagger Documentation
 
 ```
 http://localhost:3000/docs
@@ -76,26 +181,24 @@ http://localhost:3000/docs
 # 📚 API Endpoints
 
 | Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | `/` | API information |
-| GET | `/health` | Health check |
-| GET | `/tasks` | Get all tasks |
-| GET | `/tasks/:id` | Get task by ID |
-| POST | `/tasks` | Create a new task |
-| PUT | `/tasks/:id` | Update an existing task |
-| DELETE | `/tasks/:id` | Delete an existing task |
+|----------|----------|-------------|
+| GET | `/` | API Information |
+| GET | `/health` | Health Check |
+| GET | `/tasks` | Get All Tasks |
+| GET | `/tasks/:id` | Get Task By ID |
+| POST | `/tasks` | Create Task |
+| PUT | `/tasks/:id` | Update Task |
+| DELETE | `/tasks/:id` | Delete Task |
 
 ---
 
 # 📄 Sample Request
 
-### Create Task
-
-**POST /tasks**
+### POST /tasks
 
 ```json
 {
-    "title": "Learn Spring Boot"
+    "title": "Learn Docker"
 }
 ```
 
@@ -104,71 +207,105 @@ http://localhost:3000/docs
 ```json
 {
     "id": 4,
-    "title": "Learn Spring Boot",
+    "title": "Learn Docker",
     "done": false
 }
 ```
 
 ---
 
-# 📖 Swagger UI
+# 📖 Swagger Documentation
 
-After starting the server, open:
+After starting the application, open:
 
 ```
 http://localhost:3000/docs
 ```
 
-Swagger allows you to:
+Swagger UI allows you to:
 
-- Create tasks
-- View all tasks
-- View a task by ID
-- Update tasks
-- Delete tasks
-
-### Swagger Screenshot
-
-
-![Swagger UI](images/swagger.jpeg)
-
-
-# 📂 Project Structure
-
-```
-Task-CRUD-API
-│── app.js
-│── database.js
-│── openapi.json
-│── package.json
-│── package-lock.json
-│── README.md
-│── .gitignore
-│── images
-│     └── swagger.png
-```
-
-> If `tasks.db` is committed to your repository, you can include it in the project structure. If it is ignored using `.gitignore`, leave it out.
+- Create Tasks
+- Retrieve Tasks
+- Update Tasks
+- Delete Tasks
 
 ---
 
-# ✅ Internship Progress
+## 📷 Swagger Screenshot
+
+> Add your screenshot inside the `images` folder.
+
+```text
+images/
+└── swagger.jpeg
+```
+
+```markdown
+![Swagger UI](images/swagger.jpeg)
+```
+
+---
+
+# 🐳 Docker Services
+
+Docker Compose starts two services.
+
+| Service | Description |
+|----------|-------------|
+| API | Node.js + Express Application |
+| Database | PostgreSQL 16 |
+
+Run:
+
+```bash
+docker compose up --build
+```
+
+Stop:
+
+```bash
+docker compose down
+```
+
+---
+
+# 📦 Environment Variables
+
+Example `.env`
+
+```env
+DATABASE_URL=postgres://postgres:dev@localhost:5432/tasks
+```
+
+---
+
+# ✅ Internship Deliverables Completed
 
 ### Week 2
 
-- Express.js REST API
-- CRUD operations
+- REST API
+- CRUD Operations
 - Swagger Documentation
-- API Validation
+- Input Validation
 - GitHub Repository
 
 ### Week 3
 
-- SQLite Database Integration
-- Persistent Storage
-- SQL-based CRUD Operations
-- Database Initialization
-- Automatic Sample Data Seeding
+- PostgreSQL Integration
+- SQL CRUD Operations
+- Persistent Data Storage
+- Automatic Table Creation
+- Sample Data Seeding
+
+### Week 4
+
+- Dockerfile
+- Docker Compose
+- PostgreSQL Container
+- API Container
+- Docker Volume
+- Environment Variables
+- One-command Project Startup
 
 ---
 
@@ -179,3 +316,9 @@ Task-CRUD-API
 Backend AI Engineering Intern
 
 FlyRank AI Engineering Internship
+
+---
+
+## ⭐ Repository
+
+If you found this project useful, consider giving it a ⭐ on GitHub.
