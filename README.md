@@ -1,62 +1,71 @@
 # Task CRUD API
 
-A simple CRUD (Create, Read, Update, Delete) REST API built using **Node.js**, **Express.js**, and **Swagger UI** as part of the **FlyRank AI Engineering Internship – Week 2 Assignment**.
+A RESTful Task Management API built using **Node.js**, **Express.js**, **SQLite3**, and **Swagger UI** as part of the **FlyRank Backend AI Engineering Internship**.
+
+This repository contains the work completed during:
+
+- ✅ **Week 2:** CRUD API using in-memory storage
+- ✅ **Week 3:** SQLite database integration with persistent storage
 
 ---
 
-## 📌 Features
+# 📌 Features
 
 - Create a new task
 - Get all tasks
+- Get task by ID
 - Update an existing task
 - Delete a task
 - Input validation
+- SQLite database integration
+- Persistent data storage
 - Interactive API documentation using Swagger UI
 
 ---
 
-## 🛠️ Technologies Used
+# 🛠️ Technologies Used
 
 - Node.js
 - Express.js
+- SQLite3
 - Swagger UI Express
 - OpenAPI 3.0
 
 ---
 
-## 🚀 Installation & Setup
+# 🚀 Installation & Setup
 
-### 1. Clone the repository
+## 1. Clone the repository
 
 ```bash
 git clone https://github.com/Nikita-burgute/Task-CRUD-API.git
 ```
 
-### 2. Navigate to the project folder
+## 2. Navigate to the project folder
 
 ```bash
 cd Task-CRUD-API
 ```
 
-### 3. Install dependencies
+## 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Run the server
+## 4. Run the application
 
 ```bash
 node app.js
 ```
 
-The server will start at:
+Server starts at:
 
 ```
 http://localhost:3000
 ```
 
-Swagger UI:
+Swagger Documentation:
 
 ```
 http://localhost:3000/docs
@@ -64,45 +73,45 @@ http://localhost:3000/docs
 
 ---
 
-## 📚 API Endpoints
+# 📚 API Endpoints
 
 | Method | Endpoint | Description |
-|--------|----------|-------------|
+|---------|----------|-------------|
 | GET | `/` | API information |
 | GET | `/health` | Health check |
 | GET | `/tasks` | Get all tasks |
+| GET | `/tasks/:id` | Get task by ID |
 | POST | `/tasks` | Create a new task |
 | PUT | `/tasks/:id` | Update an existing task |
-| DELETE | `/tasks/:id` | Delete a task |
+| DELETE | `/tasks/:id` | Delete an existing task |
 
 ---
 
-## 📄 Example curl Command
+# 📄 Sample Request
 
-Create a new task:
+### Create Task
 
-```bash
-curl -i -X POST http://localhost:3000/tasks ^
--H "Content-Type: application/json" ^
--d "{\"title\":\"Buy milk\"}"
+**POST /tasks**
+
+```json
+{
+    "title": "Learn Spring Boot"
+}
 ```
 
-Example Response:
+### Response
 
-```http
-HTTP/1.1 201 Created
-Content-Type: application/json
-
+```json
 {
-  "id": 1,
-  "title": "Buy milk",
-  "done": false
+    "id": 4,
+    "title": "Learn Spring Boot",
+    "done": false
 }
 ```
 
 ---
 
-## 📖 Swagger UI
+# 📖 Swagger UI
 
 After starting the server, open:
 
@@ -110,24 +119,36 @@ After starting the server, open:
 http://localhost:3000/docs
 ```
 
-You can use Swagger UI to:
+Swagger allows you to:
 
-- Create a task
+- Create tasks
 - View all tasks
-- Update a task
-- Delete a task
+- View a task by ID
+- Update tasks
+- Delete tasks
 
 ### Swagger Screenshot
 
+```text
+images/swagger.png
+```
+
+or
+
+```markdown
 ![Swagger UI](images/swagger.jpeg)
+```
+
+*(Use whichever filename matches your repository. If your image is actually named `swagger.jpeg`, keep that filename instead.)*
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```
 Task-CRUD-API
 │── app.js
+│── database.js
 │── openapi.json
 │── package.json
 │── package-lock.json
@@ -137,11 +158,34 @@ Task-CRUD-API
 │     └── swagger.png
 ```
 
+> If `tasks.db` is committed to your repository, you can include it in the project structure. If it is ignored using `.gitignore`, leave it out.
+
 ---
 
-## 👨‍💻 Author
+# ✅ Internship Progress
+
+### Week 2
+
+- Express.js REST API
+- CRUD operations
+- Swagger Documentation
+- API Validation
+- GitHub Repository
+
+### Week 3
+
+- SQLite Database Integration
+- Persistent Storage
+- SQL-based CRUD Operations
+- Database Initialization
+- Automatic Sample Data Seeding
+
+---
+
+# 👨‍💻 Author
 
 **Nikita Burgute**
 
-Backend AI Engineering Intern Assignment  
+Backend AI Engineering Intern
+
 FlyRank AI Engineering Internship
